@@ -16,7 +16,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import structures.Vector2d;
 
-import java.rmi.NoSuchObjectException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,10 +24,18 @@ import static structures.Vector2d.VECTOR_WIDTH;
 public class GameStage extends Application {
     private Simulation simulation;
 
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         // set tittle
         stage.setTitle("Game of life");
+
+        stage.setOnCloseRequest(actionEvent -> {
+            System.exit(0);
+        });
 
         // add buttons
         Button choosePatternButton = new Button("Choose pattern");
@@ -58,10 +65,6 @@ public class GameStage extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-
     private void setChoosePatternScene(Stage stage) {
         GridPane gridPaneToChoosePattern = new GridPane();
         gridPaneToChoosePattern.setMinSize(400, 200);
@@ -73,7 +76,7 @@ public class GameStage extends Application {
         Label label = new Label("Choose one pattern");
         gridPaneToChoosePattern.add(label, 0, 0);
 
-        ChoiceBox choiceBox = new ChoiceBox();
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
         choiceBox.getItems().add("Beacon");
         choiceBox.getItems().add("Blinker");
         choiceBox.getItems().add("House");
@@ -85,7 +88,7 @@ public class GameStage extends Application {
         Button startGameButton = new Button("Start");
         startGameButton.setOnAction(actionEvent -> {
             try {
-                this.simulation = new Simulation((String) choiceBox.getValue());
+                this.simulation = new Simulation(choiceBox.getValue());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -108,30 +111,41 @@ public class GameStage extends Application {
         gridPaneToChoosePattern.setHgap(5);
         gridPaneToChoosePattern.setAlignment(Pos.CENTER);
 
-        Label label = new Label("Write width and height of board");
+        Label label = new Label("Width and height of board");
         gridPaneToChoosePattern.add(label, 0, 0);
 
-        TextField widthText = new TextField("10");
-        gridPaneToChoosePattern.add(widthText, 0, 1);
+        TextField width = new TextField("10");
+        gridPaneToChoosePattern.add(width, 0, 1);
 
-        TextField heightText = new TextField("10");
-        gridPaneToChoosePattern.add(heightText, 1, 1);
+        TextField height = new TextField("10");
+        gridPaneToChoosePattern.add(height, 1, 1);
 
-        Label label2 = new Label("Write survival rules and birth rules separated by space");
+        Label label2 = new Label("Survival rules and birth rules separated by space");
         gridPaneToChoosePattern.add(label2, 0, 2);
 
-        TextField survivalRulesText = new TextField("2 3");
-        gridPaneToChoosePattern.add(survivalRulesText, 0, 3);
+        TextField survivalRules = new TextField("2 3");
+        gridPaneToChoosePattern.add(survivalRules, 0, 3);
 
-        TextField birthRulesText = new TextField("3");
-        gridPaneToChoosePattern.add(birthRulesText, 1, 3);
+        TextField birthRules = new TextField("3");
+        gridPaneToChoosePattern.add(birthRules, 1, 3);
+
+        Label label3 = new Label("Width of cell");
+        gridPaneToChoosePattern.add(label3, 0, 4);
+
+        TextField vectorWidth = new TextField("24");
+        gridPaneToChoosePattern.add(vectorWidth, 0, 5);
 
         Button confirmParameters = new Button("Next");
         confirmParameters.setOnAction(actionEvent -> {
-            chooseCells(stage, Integer.parseInt(widthText.getText()), Integer.parseInt(heightText.getText()), survivalRulesText.getText(), birthRulesText.getText());
+            try {
+                Vector2d.setVectorWidth(Integer.parseInt(vectorWidth.getText()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            chooseCells(stage, Integer.parseInt(width.getText()), Integer.parseInt(height.getText()), survivalRules.getText(), birthRules.getText());
         });
 
-        gridPaneToChoosePattern.add(confirmParameters, 0, 4);
+        gridPaneToChoosePattern.add(confirmParameters, 0, 6);
         Scene scene = new Scene(gridPaneToChoosePattern);
         stage.setScene(scene);
     }
@@ -152,7 +166,7 @@ public class GameStage extends Application {
                 rectangle.setY(j * VECTOR_WIDTH);
 
                 rectangle.setOnMouseClicked(mouseEvent -> {
-                    rectangle.setFill(Color.BLACK);
+                    rectangle.setFill(Color.DARKRED);
                     positions.add(new Vector2d((int) rectangle.getX(), (int) rectangle.getY()));
                 });
 
@@ -175,7 +189,7 @@ public class GameStage extends Application {
 
         root.getChildren().add(startGameButton);
 
-        Scene scene = new Scene(root, width * VECTOR_WIDTH, height * VECTOR_WIDTH + 3 * VECTOR_WIDTH);
+        Scene scene = new Scene(root, width * VECTOR_WIDTH, height * VECTOR_WIDTH + 4 * VECTOR_WIDTH);
         stage.setScene(scene);
     }
 }

@@ -106,17 +106,9 @@ public class Board {
         return position.precedes(this.upperRight) && position.follows(this.lowerLeft);
     }
 
-//    public void start() {
-//        try {
-//            Thread.sleep(50);
-//            day();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
     public boolean isAnyCellAlive() {
-    return !this.aliveCells.isEmpty();
-}
+        return !this.aliveCells.isEmpty();
+    }
 
     public int getWidth() {
         return this.width;
@@ -139,18 +131,18 @@ public class Board {
     }
 
 
-//    @Override
-//    public String toString() {
-//        StringBuilder boardString = new StringBuilder();
-//        for (int i = 0; i < width; i++) {
-//            for (int j = 0; j < this.height; j++) {
-//                if (this.aliveCells.containsKey(new Vector2d(i, j))) {
-//                    boardString.append("■");
-//                } else boardString.append("□");
-//            }
-//            boardString.append("\n");
-//        }
-//        return boardString.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuilder boardString = new StringBuilder();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                if (this.aliveCells.containsKey(new Vector2d(i, j))) {
+                    boardString.append("■");
+                } else boardString.append("□");
+            }
+            boardString.append("\n");
+        }
+        return boardString.toString();
+    }
 
 }

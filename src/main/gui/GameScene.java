@@ -19,10 +19,10 @@ import static structures.Vector2d.VECTOR_WIDTH;
 
 public class GameScene extends Scene {
     private final HashMap<Vector2d, Rectangle> rectangles = new HashMap<>();
-    Button stopButton = new Button("stop");
+    Button stopButton = new Button("Stop");
 
     public GameScene(Group root, int width, int height, Set<Vector2d> positions) {
-        super(root, width * VECTOR_WIDTH, height * VECTOR_WIDTH + 3 * VECTOR_WIDTH);
+        super(root, width * VECTOR_WIDTH, height * VECTOR_WIDTH + 4 * VECTOR_WIDTH);
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -42,7 +42,7 @@ public class GameScene extends Scene {
 
         for (Vector2d position : positions) {
             Rectangle rectangle = rectangles.get(position);
-            rectangle.setFill(Color.BLACK);
+            rectangle.setFill(Color.DARKRED);
         }
 
         stopButton.setLayoutX(width * VECTOR_WIDTH / 2 - VECTOR_WIDTH);
@@ -55,7 +55,7 @@ public class GameScene extends Scene {
         for (Vector2d position : rectangles.keySet()) {
             Rectangle rectangle = rectangles.get(position);
             if (aliveCells.containsKey(position)) {
-                rectangle.setFill(Color.BLACK);
+                rectangle.setFill(Color.DARKRED);
             } else {
                 rectangle.setFill(Color.GAINSBORO);
             }
@@ -81,7 +81,6 @@ public class GameScene extends Scene {
 
         stopButton.setOnAction(actionEvent -> {
             timer.cancel();
-            System.exit(0);
         });
     }
 }

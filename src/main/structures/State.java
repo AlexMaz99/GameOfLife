@@ -2,7 +2,8 @@ package structures;
 
 public enum State {
     ALIVE, DEAD;
-    public State changeState(){
+
+    public State changeState() {
         return (this == ALIVE) ? DEAD : ALIVE;
     }
 }
